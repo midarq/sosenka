@@ -1,6 +1,32 @@
 import { useState } from "react";
 
-const PASSWORD = "sosenka";
+const USERS = [
+  {
+    name: "Michał",
+    role: "admin",
+    passwords: ["michał", "michal", "Michał", "Michal"],
+  },
+  {
+    name: "Patryk",
+    role: "user",
+    passwords: ["patryk", "Patryk"],
+  },
+  {
+    name: "Kuba",
+    role: "user",
+    passwords: ["kuba", "Kuba"],
+  },
+  {
+    name: "Czajson",
+    role: "user",
+    passwords: ["czajson", "Czajson"],
+  },
+  {
+    name: "Fizyk",
+    role: "user",
+    passwords: ["fizyk", "Fizyk"],
+  },
+];
 
 const sections = [
   "Lista rzeczy",
@@ -11,30 +37,54 @@ const sections = [
 ];
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("sosenka-login") === "true"
+  const savedUser = localStorage.getItem("sosenka-user");
+
+  const [currentUser, setCurrentUser] = useState(
+    savedUser ? JSON.parse(savedUser) : null
   );
   const [password, setPassword] = useState("");
   const [activeSection, setActiveSection] = useState("Lista rzeczy");
 
+  function normalize(text) {
+    return text.trim().toLowerCase();
+  }
+
+  function findUserByPassword(passwordValue) {
+    const normalizedPassword = normalize(passwordValue);
+
+    return USERS.find((user) =>
+      user.passwords.some((passwordOption) => {
+        return normalize(passwordOption) === normalizedPassword;
+      })
+    );
+  }
+
   function handleLogin(event) {
     event.preventDefault();
 
-    if (password === PASSWORD) {
-      localStorage.setItem("sosenka-login", "true");
-      setIsLoggedIn(true);
+    const user = findUserByPassword(password);
+
+    if (user) {
+      const userProfile = {
+        name: user.name,
+        role: user.role,
+      };
+
+      localStorage.setItem("sosenka-user", JSON.stringify(userProfile));
+      setCurrentUser(userProfile);
+      setPassword("");
     } else {
-      alert("Złe hasło");
+      alert("Nie znam takiego hasła");
     }
   }
 
   function handleLogout() {
-    localStorage.removeItem("sosenka-login");
-    setIsLoggedIn(false);
+    localStorage.removeItem("sosenka-user");
+    setCurrentUser(null);
     setPassword("");
   }
 
-  if (!isLoggedIn) {
+  if (!currentUser) {
     return (
       <main className="min-h-screen bg-stone-100 text-stone-900 flex items-center justify-center p-6">
         <section className="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
@@ -67,7 +117,8 @@ function App() {
           <div>
             <h1 className="text-4xl font-bold text-emerald-800">Sosenka</h1>
             <p className="mt-2 text-stone-600">
-              Lista rzeczy, wydatki, notatki, plany i logi wyjazdów.
+              Zalogowany: <strong>{currentUser.name}</strong>
+              {currentUser.role === "admin" && " — admin"}
             </p>
           </div>
 
@@ -100,6 +151,15 @@ function App() {
           <p className="mt-3 text-stone-600">
             To jest miejsce na moduł: {activeSection}.
           </p>
+
+          <div className="mt-6 rounded-2xl bg-stone-100 p-4">
+            <p>
+              Profil użytkownika: <strong>{currentUser.name}</strong>
+            </p>
+            <p>
+              Rola: <strong>{currentUser.role}</strong>
+            </p>
+          </div>
         </section>
       </div>
     </main>
