@@ -1,0 +1,109 @@
+import { useState } from "react";
+
+const PASSWORD = "sosenka";
+
+const sections = [
+  "Lista rzeczy",
+  "Wydatki",
+  "Notatki",
+  "Plany",
+  "Log roku",
+];
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("sosenka-login") === "true"
+  );
+  const [password, setPassword] = useState("");
+  const [activeSection, setActiveSection] = useState("Lista rzeczy");
+
+  function handleLogin(event) {
+    event.preventDefault();
+
+    if (password === PASSWORD) {
+      localStorage.setItem("sosenka-login", "true");
+      setIsLoggedIn(true);
+    } else {
+      alert("Złe hasło");
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("sosenka-login");
+    setIsLoggedIn(false);
+    setPassword("");
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <main className="min-h-screen bg-stone-100 text-stone-900 flex items-center justify-center p-6">
+        <section className="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
+          <h1 className="text-4xl font-bold text-emerald-800">Sosenka</h1>
+          <p className="mt-3 text-stone-600">
+            Organizator wyjazdów dla naszej ekipy.
+          </p>
+
+          <form onSubmit={handleLogin} className="mt-8 space-y-3">
+            <input
+              type="password"
+              placeholder="Wpisz hasło"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="w-full rounded-xl border border-stone-300 px-4 py-3"
+            />
+            <button className="w-full rounded-xl bg-emerald-800 px-4 py-3 font-semibold text-white">
+              Wejdź
+            </button>
+          </form>
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-stone-100 text-stone-900 p-6">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-8 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-emerald-800">Sosenka</h1>
+            <p className="mt-2 text-stone-600">
+              Lista rzeczy, wydatki, notatki, plany i logi wyjazdów.
+            </p>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="rounded-xl bg-stone-700 px-4 py-2 font-semibold text-white"
+          >
+            Wyloguj
+          </button>
+        </header>
+
+        <nav className="mb-6 flex flex-wrap gap-2">
+          {sections.map((section) => (
+            <button
+              key={section}
+              onClick={() => setActiveSection(section)}
+              className={`rounded-full px-4 py-2 font-medium ${
+                activeSection === section
+                  ? "bg-emerald-800 text-white"
+                  : "bg-white text-stone-700"
+              }`}
+            >
+              {section}
+            </button>
+          ))}
+        </nav>
+
+        <section className="rounded-3xl bg-white p-6 shadow-lg">
+          <h2 className="text-2xl font-bold">{activeSection}</h2>
+          <p className="mt-3 text-stone-600">
+            To jest miejsce na moduł: {activeSection}.
+          </p>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+export default App;
