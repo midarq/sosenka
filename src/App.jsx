@@ -2,28 +2,33 @@ import { useState } from "react";
 
 const USERS = [
   {
-    name: "Michał",
+    name: "Sierściuch",
     role: "admin",
-    passwords: ["michał", "michal", "Michał", "Michal"],
+    image: "/sosenka/users/siersciuch.jpeg",
+    passwords: ["Sierściuch"],
   },
   {
     name: "Patryk",
-    role: "user",
+    role: "admin",
+    image: "/sosenka/users/patryk.jpeg",
     passwords: ["patryk", "Patryk"],
   },
   {
     name: "Kuba",
-    role: "user",
+    role: "admin",
+    image: "/sosenka/users/kuba.jpeg",
     passwords: ["kuba", "Kuba"],
   },
   {
     name: "Czajson",
-    role: "user",
+    role: "admin",
+    image: "/sosenka/users/czajson.jpeg",
     passwords: ["czajson", "Czajson"],
   },
   {
     name: "Fizyk",
-    role: "user",
+    role: "admin",
+    image: "/sosenka/users/fizyk.jpeg",
     passwords: ["fizyk", "Fizyk"],
   },
 ];
@@ -68,6 +73,7 @@ function App() {
       const userProfile = {
         name: user.name,
         role: user.role,
+        image: user.image,
       };
 
       localStorage.setItem("sosenka-user", JSON.stringify(userProfile));
@@ -125,12 +131,20 @@ function App() {
             </p>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="rounded-xl bg-stone-700 px-4 py-2 font-semibold text-white"
-          >
-            Wyloguj
-          </button>
+          <div className="flex items-center gap-3">
+            <img
+              src={currentUser.image}
+              alt={`Profil użytkownika ${currentUser.name}`}
+              className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-lg"
+            />
+
+            <button
+              onClick={handleLogout}
+              className="rounded-xl bg-stone-700 px-4 py-2 font-semibold text-white"
+            >
+              Wyloguj
+            </button>
+          </div>
         </header>
 
         <nav className="mb-6 flex flex-wrap gap-2">
@@ -155,13 +169,21 @@ function App() {
             To jest miejsce na moduł: {activeSection}.
           </p>
 
-          <div className="mt-6 rounded-2xl bg-stone-100 p-4">
-            <p>
-              Profil użytkownika: <strong>{currentUser.name}</strong>
-            </p>
-            <p>
-              Rola: <strong>{currentUser.role}</strong>
-            </p>
+          <div className="mt-6 flex items-center gap-4 rounded-2xl bg-stone-100 p-4">
+            <img
+              src={currentUser.image}
+              alt={`Profil użytkownika ${currentUser.name}`}
+              className="h-16 w-16 rounded-full object-cover shadow"
+            />
+
+            <div>
+              <p>
+                Profil użytkownika: <strong>{currentUser.name}</strong>
+              </p>
+              <p>
+                Rola: <strong>{currentUser.role}</strong>
+              </p>
+            </div>
           </div>
         </section>
       </div>
