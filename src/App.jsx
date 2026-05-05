@@ -86,10 +86,13 @@ function App() {
 
   if (!currentUser) {
     return (
-      <main className="min-h-screen bg-stone-100 text-stone-900 flex items-center justify-center p-6">
-        <section className="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
+      <main
+        className="min-h-screen bg-contain bg-center bg-no-repeat bg-black text-stone-900 flex items-end justify-center p-6 pb-12"
+        style={{ backgroundImage: "url('/sosenka/background.jpeg')" }}
+      >
+        <section className="w-full max-w-md rounded-3xl bg-white/55 p-8 shadow-2xl backdrop-blur-md border border-white/30">
           <h1 className="text-4xl font-bold text-emerald-800">Sosenka</h1>
-          <p className="mt-3 text-stone-600">
+          <p className="mt-3 text-stone-700">
             Organizator wyjazdów dla naszej ekipy.
           </p>
 
@@ -99,7 +102,7 @@ function App() {
               placeholder="Wpisz hasło"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-xl border border-stone-300 px-4 py-3"
+              className="w-full rounded-xl border border-stone-300 bg-white/80 px-4 py-3"
             />
             <button className="w-full rounded-xl bg-emerald-800 px-4 py-3 font-semibold text-white">
               Wejdź
